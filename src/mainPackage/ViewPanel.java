@@ -1,0 +1,53 @@
+package mainPackage;
+
+import javax.swing.*;
+
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Vector;
+class ViewPanel extends JPanel
+{
+	//SIZE IS 900, 900
+	//PARTICLE DENSITY (AMOUNT ON SCREEN)
+	public static int fieldDensity = 100;
+	//ArrayList<Particle> field;
+	Vector<Particle> particleVector;
+	Particle A, B, mouseParticle;
+	public ViewPanel()
+	{
+		System.out.println("VIEW FRAME!");
+		//mouseParticle = new Particle(0, 0, 0);
+		//field = new ArrayList<Particle>();
+		particleVector = new Vector<Particle>();
+		for (int q1 = 0; q1 < 900; q1 += 900/fieldDensity)
+		{
+			for (int q2 = 0; q2 < 900; q2 += 900/fieldDensity)
+			{
+				particleVector.addElement(new Particle(q1+20, q2+20, 50));
+				//field.add(new Particle(q1+20, q2+20, 50));
+			}
+		}
+		//UniversalFunctions.getSystemMass(particleVector);
+		setBackground(Color.BLACK);
+	}
+	public void paintComponent(Graphics G)
+	{
+		super.paintComponent(G);
+		for (Enumeration<Particle> e = particleVector.elements(); e.hasMoreElements();)
+		{
+			((Particle) e.nextElement()).drawParticle(G);
+		}	
+		G.setColor(Color.GREEN);
+		G.drawString("Number of particles on-screen: " + particleVector.size(), 5, 15);
+		G.drawString("Physics Mode: " + UniversalFunctions.PHYSICS_MODE + " - Press keys 1 to 4 to switch (1: Gravity, 2: Orbiting, 3: Oscillating, 4: Event Horizon)", 5, 30);
+		G.drawString("Force Factor: " + UniversalFunctions.FORCEFACTOR + " - Press Q to modify and S to switch signs", 5, 45);
+		G.drawString("Jittering: " + UniversalFunctions.JITTER + " - Press J to switch", 5, 60);
+		G.drawString("AUTOPILOT: " + Driver.viewFrame.autoPilot +" - PRESS A TO SWITCH", 5, 75);
+		G.drawString("Press SPACE or move the mouse off-window to pause! Press SPACE again or return the mouse to resume!", 5, 90);
+		//if (ViewFrame.mousePressed)
+			//mouseParticle.drawParticle(G);
+	}
+}
