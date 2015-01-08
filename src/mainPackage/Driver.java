@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.InputMismatchException;
 import java.util.Random;
@@ -101,20 +102,33 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 			}
 		}
 		Particle A, B;
-		Particle centerOfMass = UniversalFunctions.centerOfMass(VP.particleVector);
+		Particle centerOfMass = UniversalFunctions.centerOfMass(VP.field);
 		CoMx = (int) centerOfMass.X; CoMy = (int) centerOfMass.Y;
 		
-		for (Enumeration<Particle> q1 = VP.particleVector.elements(); q1.hasMoreElements();)
+		/*for (Enumeration<Particle> q1 = VP.particleVector.elements(); q1.hasMoreElements();)
 		{
 			A = (Particle) q1.nextElement();
-			//for (Enumeration q2 = VP.particleVector.elements(); q2.hasMoreElements();)
-			//{
-				//B = (Particle) q2.nextElement();
-				UniversalFunctions.determineGravitation(A, centerOfMass);
-				
-				A.X -= (CoMx - 450); A.Y -= (CoMy - 450);
+			for (Enumeration<Particle> q2 = VP.particleVector.elements(); q2.hasMoreElements();)
+			{
+				B = (Particle) q2.nextElement();
+				//UniversalFunctions.determineGravitation(A, centerOfMass);
+				UniversalFunctions.determineGravitation(A, B);
+				//System.out.println(q1 +", " + q2);
+				//A.X -= (int) (.2 (CoMx - 450)); A.Y -= (int) (.2  (CoMy - 450));
 				//UniversalFunctions.determineGravitation(A, VP.mouseParticle);
-			//}				
+			}				
+		}*/
+						
+		for (int q1 = 0; q1< VP.field.size(); q1++)
+		{
+			A = (Particle) VP.field.get(q1);
+			/*for (int q2 = 0; q2 < VP.field.size(); q2++)
+			{
+				B = (Particle) VP.field.get(q2);
+				UniversalFunctions.determineGravitation(A, B);
+			}*/			
+			UniversalFunctions.determineGravitation(A, centerOfMass);	
+			A.X -= (int) (.2 * (CoMx - 450)); A.Y -= (int) (.2 * (CoMy - 450));		
 		}
 		VP.repaint();
 		A = null; B = null;
@@ -137,6 +151,13 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 		else if (E.getKeyCode() == KeyEvent.VK_4)
 		{
 			UniversalFunctions.setPhysMode(4);
+		}
+		if (E.getKeyCode() == KeyEvent.VK_C)
+		{
+			int newColorMode = UniversalFunctions.COLOR_MODE + 1;
+			if (newColorMode > 9)
+				newColorMode = 1;
+			UniversalFunctions.setColorMode(newColorMode);
 		}
 		if (E.getKeyCode() == KeyEvent.VK_J)
 		{
@@ -174,12 +195,12 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 	
 	public void resetParticles()
 	{
-		VP.particleVector = new Vector<Particle>();
+		VP.field = new ArrayList<Particle>();
 		for (int q1 = 0; q1 < 900; q1 += 900/VP.fieldDensity)
 		{
 			for (int q2 = 0; q2 < 900; q2 += 900/VP.fieldDensity)
 			{
-				VP.particleVector.addElement(new Particle(q1+20, q2+20, 50));
+				VP.field.add(new Particle(q1+20, q2+20, 50));
 			}
 		}
 	}
@@ -194,10 +215,10 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 	}*/
 	public void mouseMoved(MouseEvent e) 
 	{
-		//mouseX = e.getX();
-		//mouseY = e.getY();
-		//VP.mouseParticle.X = e.getX();
-		//VP.mouseParticle.Y = e.getY();
+		mouseX = e.getX();
+		mouseY = e.getY();
+		VP.mouseParticle.X = e.getX();
+		VP.mouseParticle.Y = e.getY();
 	}
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
@@ -212,14 +233,14 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 	public void mousePressed(MouseEvent e)
 	{
 		mousePressed = true;
-		//VP.mouseParticle.artificialParticle = true;
+		VP.mouseParticle.artificialParticle = true;
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) 
 	{
 		mousePressed = false;
-		/*VP.particleVector.add(new Particle(VP.mouseParticle));
+		VP.field.add(new Particle(VP.mouseParticle));
 		VP.mouseParticle.mass = 0;	VP.mouseParticle.X = e.getX(); VP.mouseParticle.Y = e.getY();
-		System.out.println("MOUSE RELEASED");*/
+		System.out.println("MOUSE RELEASED");
 	}
 }

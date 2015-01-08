@@ -25,30 +25,53 @@ public class Particle
 		artificialParticle = true;
 	}
 	
-	public void velocityColor()
+	public void velocityColor(int colorMode)
 	{
-		double newColorValue = 0;
+		int newColorValue = 0;
 		//System.out.println(vel);
-		newColorValue = Math.abs(vel)/1000.00 * 255;
+		newColorValue = (int)(Math.abs(vel)/1000.00 * 255);
 		if (newColorValue > 255)
-		{
 			newColorValue = 255;
-		}
+		if (newColorValue < 0)
+			newColorValue = 0;
 		//System.out.println(newColorValue + ", " + (255-newColorValue));
-		color = new Color(255-(int)newColorValue, 0, (int)newColorValue);
+		if (colorMode == 1)
+			color = new Color(255-newColorValue, 0, newColorValue);
+		else if (colorMode == 2)
+			color = new Color(newColorValue, 255-newColorValue, 0);
+		else if (colorMode == 3)
+			color = new Color(newColorValue, newColorValue, newColorValue);
+		else if (colorMode == 4)
+			color = new Color(255-newColorValue, 255-newColorValue, 255-newColorValue);
+		else if (colorMode == 5)
+			color = new Color(Math.abs(128-newColorValue), Math.abs(128-newColorValue), Math.abs(128-newColorValue));
+		else if (colorMode == 6)
+			color = new Color(newColorValue, 0, 0);
+		else if (colorMode == 7)
+			color = new Color(0, newColorValue, 0);
+		else if (colorMode == 8)
+			color = new Color(0, 0, newColorValue);
+	}
+	public void velocityColorByDistance(int Distance)
+	{
+		int newColorValue = (int)(Math.abs(Distance)/450.00 * 255);
+		if (newColorValue > 255)
+			newColorValue = 255;
+		if (newColorValue < 0)
+			newColorValue = 0;
+	    color = new Color(255-newColorValue, 0, 255-newColorValue);
 	}
 	public void move()
 	{
 		X += velocityX; Y += velocityY;
 		//System.out.println(vel);
-		velocityColor();
 	}
 	
 	public void drawParticle(Graphics G)
 	{
 		G.setColor(color);
 		if (artificialParticle == false)
-			G.fillOval((int)(X-2), (int)(Y-2), 4, 4);
+			G.fillOval((int)(X-1), (int)(Y-1), 2, 2);
 		else 
 			G.fillRect((int)(X-5), (int)(Y-5),  10,  10);
 		//X+=velocityX; Y+= velocityY;

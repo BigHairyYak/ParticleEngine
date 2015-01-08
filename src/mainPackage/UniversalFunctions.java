@@ -1,5 +1,6 @@
 package mainPackage;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Random;
 import java.util.Vector;
@@ -10,17 +11,18 @@ public abstract class UniversalFunctions
 	static final float G = (float) 5;
 	public static float systemMass;
 	public static int PHYSICS_MODE = 1;
+	public static int COLOR_MODE = 1;
 	public static float FORCEFACTOR = (float) .4;
 	public static boolean JITTER = true;
 	static Particle massCenter = null;
-	public static Particle centerOfMass(Vector<Particle> particles)
+	public static Particle centerOfMass(ArrayList<Particle> field)
 	{
 		Particle placeholderParticle = null;
 		float centerX = 0, centerY = 0;//, systemMass = 0;
 		float numeratorX = 0, numeratorY = 0;
-		for (Enumeration<Particle> e = particles.elements(); e.hasMoreElements();)
+		for (int q = 0; q < field.size(); q++)
 		{
-			placeholderParticle = ((Particle) e.nextElement());
+			placeholderParticle = field.get(q);
 			numeratorX += (placeholderParticle.mass * placeholderParticle.X);
 			numeratorY += (placeholderParticle.mass * placeholderParticle.Y);
 			systemMass += placeholderParticle.mass;
@@ -102,7 +104,12 @@ public abstract class UniversalFunctions
 		}
 			
 		Planet1.vel = velocity;
-		Planet1.move();
+		Planet1.move(); 
+		if (COLOR_MODE != 9)
+			Planet1.velocityColor(COLOR_MODE);
+		else if (COLOR_MODE == 9)
+			Planet1.velocityColorByDistance((int)distance);
+		
 	}
 	
 	public static void adjustForceFactor(float adjustment)
@@ -115,6 +122,10 @@ public abstract class UniversalFunctions
 	public static void forceAdjustment(Float FA)
 	{
 		FORCEFACTOR = FA;
+	}
+	public static void setColorMode(int newColorMode)
+	{
+		COLOR_MODE = newColorMode;
 	}
 	public static void setPhysMode(int newPhysMode)
 	{
