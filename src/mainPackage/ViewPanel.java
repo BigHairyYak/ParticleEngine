@@ -12,8 +12,8 @@ class ViewPanel extends JPanel
 {
 	//SIZE IS 900, 900
 	//PARTICLE DENSITY (AMOUNT ON SCREEN)
-	public static int fieldDensity = 100;
-	ArrayList<Particle> field;
+	public static int fieldDensity = 20;
+	ArrayList<Particle> field, artificialParticles;
 	//Vector<Particle> particleVector;
 	Particle A, B, mouseParticle;
 	public ViewPanel()
@@ -21,13 +21,14 @@ class ViewPanel extends JPanel
 		System.out.println("VIEW FRAME!");
 		mouseParticle = new Particle(0, 0, 0);
 		field = new ArrayList<Particle>();
+		artificialParticles = new ArrayList<Particle>();
 		//particleVector = new Vector<Particle>();
 		for (int q1 = 0; q1 <= 900; q1 += 900/fieldDensity)
 		{
 			for (int q2 = 0; q2 <= 900; q2 += 900/fieldDensity)
 			{
 				//particleVector.addElement(new Particle(q1+20, q2+20, 50));
-				field.add(new Particle(q1+10, q2+10, 50));
+				field.add(new Particle(q1+10, q2+10, 100));
 			}
 		}
 		//UniversalFunctions.getSystemMass(particleVector);
@@ -43,6 +44,12 @@ class ViewPanel extends JPanel
 		for (int q = 0; q < field.size(); q++)
 		{
 			((Particle) field.get(q)).drawParticle(G);
+			//if (q > 2)
+				//G.fillRect(((int)field.get(q).X), (int)field.get(q).Y, (int)field.get(q-1).X, (int)field.get(q-1).Y);
+		}
+		for (int q = 0; q < artificialParticles.size(); q++)
+		{
+			artificialParticles.get(q).drawParticle(G);
 		}
 		G.setColor(Color.GREEN);
 		G.drawString("Number of particles on-screen: " + field.size(), 5, 15);

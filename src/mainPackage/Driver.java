@@ -33,14 +33,11 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 {
 	ViewPanel VP;
 	Scanner INPUT = new Scanner(System.in);
-	int mouseX, mouseY, pmouseX, pmouseY;
-	float mouseMass;
+	int mouseX, mouseY, pmouseX, pmouseY, ticksSinceLastSwitch, CoMx, CoMy = 0;
 	public float ADJUSTMENT = (float) -1;
 	public boolean autoPilot;
-	Timer gameTimer = new Timer(50, this);
+	Timer gameTimer = new Timer(10, this);
 	Random PhysModeSwitcher = new Random();
-	int ticksSinceLastSwitch = 0;
-	int CoMx = 0; int CoMy = 0;
 	static boolean mousePressed = false;
 	public ViewFrame()
 	{
@@ -52,6 +49,7 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 		addMouseMotionListener(this);
 		addMouseListener(this);
 		gameTimer.start();		
+		//VP.artificialParticles.add(new Particle((float)450, (float)450, (float)Math.pow(10,6)));
 	}
 	public void actionPerformed(ActionEvent e)
 	{
@@ -122,12 +120,13 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 		for (int q1 = 0; q1< VP.field.size(); q1++)
 		{
 			A = (Particle) VP.field.get(q1);
-			/*for (int q2 = 0; q2 < VP.field.size(); q2++)
+			for (int q2 = 0; q2 < VP.field.size(); q2++)
 			{
+				B = VP.field.get(q2);
 				B = (Particle) VP.field.get(q2);
 				UniversalFunctions.determineGravitation(A, B);
-			}*/			
-			UniversalFunctions.determineGravitation(A, centerOfMass);	
+			}			
+			//UniversalFunctions.determineGravitation(A, centerOfMass);	
 			A.X -= (int) (.2 * (CoMx - 450)); A.Y -= (int) (.2 * (CoMy - 450));		
 		}
 		VP.repaint();
@@ -221,9 +220,10 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 		VP.mouseParticle.Y = e.getY();
 	}
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseClicked(MouseEvent e)
+	{
+		//VP.artificialParticles.add(new Particle((float)e.getX(), (float)e.getY(), (float)(Math.pow(10, 7))));
+		//VP.artificialParticles.get(VP.artificialParticles.size()-1).artificialParticle = true;
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {if (!gameTimer.isRunning()) gameTimer.start();}
@@ -233,14 +233,14 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 	public void mousePressed(MouseEvent e)
 	{
 		mousePressed = true;
-		VP.mouseParticle.artificialParticle = true;
+		//VP.mouseParticle.artificialParticle = true;
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) 
 	{
-		mousePressed = false;
+		/*mousePressed = false;
 		VP.field.add(new Particle(VP.mouseParticle));
 		VP.mouseParticle.mass = 0;	VP.mouseParticle.X = e.getX(); VP.mouseParticle.Y = e.getY();
-		System.out.println("MOUSE RELEASED");
+		System.out.println("MOUSE RELEASED");*/
 	}
 }

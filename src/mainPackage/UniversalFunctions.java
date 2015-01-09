@@ -105,9 +105,9 @@ public abstract class UniversalFunctions
 			
 		Planet1.vel = velocity;
 		Planet1.move(); 
-		if (COLOR_MODE != 9)
+		if (COLOR_MODE != 10)
 			Planet1.velocityColor(COLOR_MODE);
-		else if (COLOR_MODE == 9)
+		else if (COLOR_MODE == 10)
 			Planet1.velocityColorByDistance((int)distance);
 		
 	}

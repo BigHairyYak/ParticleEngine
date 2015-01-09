@@ -73,7 +73,7 @@ public class Particle
 		if (artificialParticle == false)
 			G.fillOval((int)(X-1), (int)(Y-1), 2, 2);
 		else 
-			G.fillRect((int)(X-5), (int)(Y-5),  10,  10);
+			G.fillOval((int)(X-2), (int)(Y-2),  4,  4);
 		//X+=velocityX; Y+= velocityY;
 	}
 }
