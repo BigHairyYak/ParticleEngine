@@ -10,17 +10,19 @@ public abstract class UniversalFunctions
 	public static Random Q = new Random();
 	static final float G = (float) 5;
 	public static float systemMass;
+	public static float MAXIMUM_SPEED = 800;
 	public static int PHYSICS_MODE = 1;
 	public static int COLOR_MODE = 1;
 	public static float FORCEFACTOR = (float) .4;
-	public static boolean JITTER = true;
+	public static boolean JITTER = false;
+	
 	static Particle massCenter = null;
 	public static Particle centerOfMass(ArrayList<Particle> field)
 	{
 		Particle placeholderParticle = null;
 		float centerX = 0, centerY = 0;//, systemMass = 0;
 		float numeratorX = 0, numeratorY = 0;
-		for (int q = 0; q < field.size(); q++)
+		for (int q = 0; q <= field.size(); q++)
 		{
 			placeholderParticle = field.get(q);
 			numeratorX += (placeholderParticle.mass * placeholderParticle.X);
@@ -64,7 +66,11 @@ public abstract class UniversalFunctions
 		//System.out.println(" Distance: " + distance);
 		
 		if (distance != 0)
+		{
 			velocity = (float) Math.sqrt((G*mass2)/distance) * FORCEFACTOR;
+			if (velocity > MAXIMUM_SPEED)
+				velocity = MAXIMUM_SPEED;
+		}
 		else if (distance == 0)
 			velocity = 0;
 		else
@@ -76,7 +82,8 @@ public abstract class UniversalFunctions
 		
 		if (PHYSICS_MODE == 2) //"Spiral" PhysMode
 		{
-			angle += (Math.PI)/2;
+			//System.out.println(velocity);
+			angle += (Math.PI)/2 * (velocity/MAXIMUM_SPEED);
 		}
 		
 		//angle is given facing the actual other body - true gravity
@@ -94,22 +101,18 @@ public abstract class UniversalFunctions
 		{	
 			Planet1.velocityX += velocityX; Planet1.velocityY += velocityY;
 		}
+		
 		if (PHYSICS_MODE  == 2)
 		{
-			Planet1.velocityX = velocityX; Planet1.velocityY = velocityY;
+			Planet1.velocityX += velocityX; Planet1.velocityY += velocityY;
 		}
+		
 		if (PHYSICS_MODE == 4)
 		{
 			Planet1.velocityX += velocityX; Planet1.velocityY = velocityY;
 		}
-			
-		Planet1.vel = velocity;
-		Planet1.move(); 
-		if (COLOR_MODE != 10)
-			Planet1.velocityColor(COLOR_MODE);
-		else if (COLOR_MODE == 10)
-			Planet1.velocityColorByDistance((int)distance);
 		
+		Planet1.move(); 
 	}
 	
 	public static void adjustForceFactor(float adjustment)

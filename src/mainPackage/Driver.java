@@ -65,43 +65,20 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 				int newMode = 1;
 				switch ((PhysModeSwitcher.nextInt(16) + 1)/3)
 				{
-					case (1):
-					{
-						newMode = 1;
-						break;
-					}
-					case (2):
-					{
-						newMode = 2;
-						break;
-					}
-					case (3):
-					{
-						newMode = 4;
-						break;
-					}
-					case (4):
-					{
-						newMode = 4;
-						break;
-					}
-					case (5):
-					{
-						resetParticles();
-						break;
-					}
-					default:
-					{
-						break;
-					}
+					case (1):{newMode = 1;}break;
+					case (2):{newMode = 2;}break;
+					case (3):{newMode = 4;}break;
+					case (4):{newMode = 4;}break;
+					case (5):{resetParticles();}break;
+					default:{}break;
 				}
 				UniversalFunctions.setPhysMode(newMode);
 				ticksSinceLastSwitch = 0;
 			}
 		}
 		Particle A, B;
-		Particle centerOfMass = UniversalFunctions.centerOfMass(VP.field);
-		CoMx = (int) centerOfMass.X; CoMy = (int) centerOfMass.Y;
+		//Particle centerOfMass = UniversalFunctions.centerOfMass(VP.field);
+		//CoMx = (int) centerOfMass.X; CoMy = (int) centerOfMass.Y;
 		
 		/*for (Enumeration<Particle> q1 = VP.particleVector.elements(); q1.hasMoreElements();)
 		{
@@ -120,14 +97,15 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 		for (int q1 = 0; q1< VP.field.size(); q1++)
 		{
 			A = (Particle) VP.field.get(q1);
-			for (int q2 = 0; q2 < VP.field.size(); q2++)
+			for (int q2 = 0; q2 < VP.artificialParticles.size(); q2++)
 			{
-				B = VP.field.get(q2);
-				B = (Particle) VP.field.get(q2);
+				//B = VP.field.get(q2);
+				B = (Particle) VP.artificialParticles.get(q2);
 				UniversalFunctions.determineGravitation(A, B);
+				//System.out.println(A + ", " + B);
 			}			
 			//UniversalFunctions.determineGravitation(A, centerOfMass);	
-			A.X -= (int) (.2 * (CoMx - 450)); A.Y -= (int) (.2 * (CoMy - 450));		
+			//A.X -= (int) (.2 * (CoMx - 450)); A.Y -= (int) (.2 * (CoMy - 450));		
 		}
 		VP.repaint();
 		A = null; B = null;
@@ -195,9 +173,9 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 	public void resetParticles()
 	{
 		VP.field = new ArrayList<Particle>();
-		for (int q1 = 0; q1 < 900; q1 += 900/VP.fieldDensity)
+		for (float q1 = 1; q1 < 900.00; q1 += 900.00/VP.fieldDensity)
 		{
-			for (int q2 = 0; q2 < 900; q2 += 900/VP.fieldDensity)
+			for (float q2 = 1; q2 < 900.00; q2 += 900.00/VP.fieldDensity)
 			{
 				VP.field.add(new Particle(q1+20, q2+20, 50));
 			}
@@ -222,8 +200,8 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		//VP.artificialParticles.add(new Particle((float)e.getX(), (float)e.getY(), (float)(Math.pow(10, 7))));
-		//VP.artificialParticles.get(VP.artificialParticles.size()-1).artificialParticle = true;
+		VP.artificialParticles.add(new Particle((float)e.getX(), (float)e.getY(), (float)(Math.pow(10, 7))));
+		VP.artificialParticles.get(VP.artificialParticles.size()-1).artificialParticle = true;
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {if (!gameTimer.isRunning()) gameTimer.start();}

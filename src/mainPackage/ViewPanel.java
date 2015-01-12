@@ -12,7 +12,7 @@ class ViewPanel extends JPanel
 {
 	//SIZE IS 900, 900
 	//PARTICLE DENSITY (AMOUNT ON SCREEN)
-	public static int fieldDensity = 20;
+	public static int fieldDensity = 200;
 	ArrayList<Particle> field, artificialParticles;
 	//Vector<Particle> particleVector;
 	Particle A, B, mouseParticle;
@@ -23,9 +23,9 @@ class ViewPanel extends JPanel
 		field = new ArrayList<Particle>();
 		artificialParticles = new ArrayList<Particle>();
 		//particleVector = new Vector<Particle>();
-		for (int q1 = 0; q1 <= 900; q1 += 900/fieldDensity)
+		for (float q1 = 1; q1 < 900.00; q1 += 900.00/fieldDensity)
 		{
-			for (int q2 = 0; q2 <= 900; q2 += 900/fieldDensity)
+			for (float q2 = 1; q2 < 900.00; q2 += 900.00/fieldDensity)
 			{
 				//particleVector.addElement(new Particle(q1+20, q2+20, 50));
 				field.add(new Particle(q1+10, q2+10, 100));

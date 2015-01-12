@@ -29,7 +29,13 @@ public class Particle
 	{
 		int newColorValue = 0;
 		//System.out.println(vel);
-		newColorValue = (int)(Math.abs(vel)/1000.00 * 255);
+		
+		//if (UniversalFunctions.PHYSICS_MODE != 2)
+			newColorValue = (int)(Math.abs(vel)/(50) * 255);
+		//else
+			//newColorValue = (int)(Math.abs(vel)/5.00 * 255);
+		
+		
 		if (newColorValue > 255)
 			newColorValue = 255;
 		if (newColorValue < 0)
@@ -63,7 +69,14 @@ public class Particle
 	}
 	public void move()
 	{
+		float lastX = X; float lastY = Y;
+		vel = (float)Math.sqrt((velocityX*velocityX)+(velocityY*velocityY));
+		velocityColor(UniversalFunctions.COLOR_MODE);
+		
 		X += velocityX; Y += velocityY;
+		
+		float distX = X-lastX; float distY = Y - lastY;
+		//vel = (float)Math.sqrt((distX*distX)+(distY*distY));
 		//System.out.println(vel);
 	}
 	
@@ -71,7 +84,7 @@ public class Particle
 	{
 		G.setColor(color);
 		if (artificialParticle == false)
-			G.fillOval((int)(X-1), (int)(Y-1), 2, 2);
+			G.fillOval((int)(X), (int)(Y), 1, 1);
 		else 
 			G.fillOval((int)(X-2), (int)(Y-2),  4,  4);
 		//X+=velocityX; Y+= velocityY;
