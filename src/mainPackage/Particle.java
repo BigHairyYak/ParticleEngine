@@ -15,7 +15,7 @@ public class Particle
 		X = x; Y = y; mass = Mass;
 		velocityX = velocityY = 0;
 
-		//color = new Color(Q.nextInt(256), Q.nextInt(256), Q.nextInt(256));
+		color = new Color(Q.nextInt(256), Q.nextInt(256), Q.nextInt(256));
 	}
 	public Particle(Particle artificial)
 	{

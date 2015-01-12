@@ -49,6 +49,7 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 		addMouseMotionListener(this);
 		addMouseListener(this);
 		gameTimer.start();		
+		//VP.repaint();
 		//VP.artificialParticles.add(new Particle((float)450, (float)450, (float)Math.pow(10,6)));
 	}
 	public void actionPerformed(ActionEvent e)
@@ -77,23 +78,7 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 			}
 		}
 		Particle A, B;
-		//Particle centerOfMass = UniversalFunctions.centerOfMass(VP.field);
-		//CoMx = (int) centerOfMass.X; CoMy = (int) centerOfMass.Y;
 		
-		/*for (Enumeration<Particle> q1 = VP.particleVector.elements(); q1.hasMoreElements();)
-		{
-			A = (Particle) q1.nextElement();
-			for (Enumeration<Particle> q2 = VP.particleVector.elements(); q2.hasMoreElements();)
-			{
-				B = (Particle) q2.nextElement();
-				//UniversalFunctions.determineGravitation(A, centerOfMass);
-				UniversalFunctions.determineGravitation(A, B);
-				//System.out.println(q1 +", " + q2);
-				//A.X -= (int) (.2 (CoMx - 450)); A.Y -= (int) (.2  (CoMy - 450));
-				//UniversalFunctions.determineGravitation(A, VP.mouseParticle);
-			}				
-		}*/
-						
 		for (int q1 = 0; q1< VP.field.size(); q1++)
 		{
 			A = (Particle) VP.field.get(q1);
@@ -185,11 +170,7 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 	public void keyReleased(KeyEvent arg0) {}
 	public void keyTyped(KeyEvent arg0) {}
 	public void mouseDragged(MouseEvent e) {}
-	/*public void mouseMoved(MouseEvent e) 
-	{
-		mouseX = e.getX(); mouseY = e.getY();
-		VP.particleVector.addElement(new Particle(mouseX, mouseY, 50));
-	}*/
+	
 	public void mouseMoved(MouseEvent e) 
 	{
 		mouseX = e.getX();
@@ -208,17 +189,7 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 	@Override
 	public void mouseExited(MouseEvent e) {gameTimer.stop();}
 	@Override
-	public void mousePressed(MouseEvent e)
-	{
-		mousePressed = true;
-		//VP.mouseParticle.artificialParticle = true;
-	}
+	public void mousePressed(MouseEvent e){}
 	@Override
-	public void mouseReleased(MouseEvent e) 
-	{
-		/*mousePressed = false;
-		VP.field.add(new Particle(VP.mouseParticle));
-		VP.mouseParticle.mass = 0;	VP.mouseParticle.X = e.getX(); VP.mouseParticle.Y = e.getY();
-		System.out.println("MOUSE RELEASED");*/
-	}
+	public void mouseReleased(MouseEvent e){}
 }
