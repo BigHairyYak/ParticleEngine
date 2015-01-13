@@ -27,7 +27,6 @@ public abstract class UniversalFunctions
 			placeholderParticle = field.get(q);
 			numeratorX += (placeholderParticle.mass * placeholderParticle.X);
 			numeratorY += (placeholderParticle.mass * placeholderParticle.Y);
-			systemMass += placeholderParticle.mass;
 		}
 		centerX = numeratorX/systemMass;
 		centerY = numeratorY/systemMass;
@@ -53,15 +52,13 @@ public abstract class UniversalFunctions
 	 * Velocity = Math.sqrt((G*Mass2)/distance)
 	 */
 
-	public static void determineGravitation(Particle Planet1, Particle Planet2)
+	public synchronized static void determineGravitation(Particle Planet1, Particle Planet2)
 	{
 		//System.out.println("Determining Gravity");
 		float mass2 = Planet2.mass;
-		float x1 = Planet1.X; float x2 = Planet2.X;
-		float y1 = Planet1.Y; float y2 = Planet2.Y;
-		float distX, distY, distance, velocity, angle, velocityX, velocityY;
+		float distance, velocity, angle, velocityX, velocityY;
 	
-		distX = (x2-x1); distY = (y2-y1);
+		float distX = (Planet2.X-Planet1.X); float distY = (Planet2.Y-Planet1.Y);
 		distance = (float) Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
 		//System.out.println(" Distance: " + distance);
 		

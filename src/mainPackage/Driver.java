@@ -13,9 +13,10 @@ import java.util.Enumeration;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.TimerTask;
 import java.util.Vector;
+import java.util.Timer;
 
-import javax.swing.Timer;
 import javax.swing.JFrame;
 
 public class Driver 
@@ -26,21 +27,22 @@ public class Driver
 		//Grid grid = new Grid(20, 400, 400);
 		viewFrame = new ViewFrame();
 		viewFrame.setVisible(true);
-		viewFrame.gameTimer.start();
+		//viewFrame.gameTimer.start();
 	}
 }
 class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseListener, MouseMotionListener
 {
+	public Timer gameTimer = new Timer();
 	ViewPanel VP;
 	Scanner INPUT = new Scanner(System.in);
 	int mouseX, mouseY, pmouseX, pmouseY, ticksSinceLastSwitch, CoMx, CoMy = 0;
 	public float ADJUSTMENT = (float) -1;
 	public boolean autoPilot;
-	Timer gameTimer = new Timer(10, this);
 	Random PhysModeSwitcher = new Random();
 	static boolean mousePressed = false;
 	public ViewFrame()
 	{
+		//gameTimer.start();
 		VP = new ViewPanel();
 		add(VP);
 		setSize(950, 950);
@@ -48,9 +50,17 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 		addKeyListener(this);
 		addMouseMotionListener(this);
 		addMouseListener(this);
-		gameTimer.start();		
-		//VP.repaint();
-		//VP.artificialParticles.add(new Particle((float)450, (float)450, (float)Math.pow(10,6)));
+		//gameTimer.start();	
+		
+		TimerTask Q = new TimerTask()
+		{
+			public void run()
+			{
+				repaint();
+			}			
+		};	
+		gameTimer.schedule(Q, (long)0, (long)1);
+		VP.startThreads();
 	}
 	public void actionPerformed(ActionEvent e)
 	{
@@ -77,8 +87,8 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 				ticksSinceLastSwitch = 0;
 			}
 		}
-		Particle A, B;
 		
+		/*Particle A, B;
 		for (int q1 = 0; q1< VP.field.size(); q1++)
 		{
 			A = (Particle) VP.field.get(q1);
@@ -90,10 +100,14 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 				//System.out.println(A + ", " + B);
 			}			
 			//UniversalFunctions.determineGravitation(A, centerOfMass);	
-			//A.X -= (int) (.2 * (CoMx - 450)); A.Y -= (int) (.2 * (CoMy - 450));		
+			//A.X -= (int) (.2 * (CoMx - 450)); A.Y -= (int) (.2 * (CoMy - 450));
 		}
-		VP.repaint();
+		
 		A = null; B = null;
+		
+		*/
+		
+		//VP.repaint();	
 		ticksSinceLastSwitch++;
 	}
 	public void keyPressed(KeyEvent E)
@@ -148,19 +162,19 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 		}
 		if (E.getKeyCode() == KeyEvent.VK_SPACE) //PAUSE THE TIMER
 		{
-			if (gameTimer.isRunning())
+			/*if (gameTimer.isRunning())
 				gameTimer.stop();
 			else
-				gameTimer.start();
+				gameTimer.start();*/
 		}
 	}
 	
 	public void resetParticles()
 	{
 		VP.field = new ArrayList<Particle>();
-		for (float q1 = 1; q1 < 900.00; q1 += 900.00/VP.fieldDensity)
+		for (float q1 = 1; q1 < 950.00; q1 += 950.00/VP.fieldDensity)
 		{
-			for (float q2 = 1; q2 < 900.00; q2 += 900.00/VP.fieldDensity)
+			for (float q2 = 1; q2 < 950.00; q2 += 950.00/VP.fieldDensity)
 			{
 				VP.field.add(new Particle(q1+20, q2+20, 50));
 			}
@@ -185,9 +199,9 @@ class ViewFrame extends JFrame implements ActionListener, KeyListener, MouseList
 		VP.artificialParticles.get(VP.artificialParticles.size()-1).artificialParticle = true;
 	}
 	@Override
-	public void mouseEntered(MouseEvent e) {if (!gameTimer.isRunning()) gameTimer.start();}
+	public void mouseEntered(MouseEvent e) {}//if (!gameTimer.isRunning()) gameTimer.start();}
 	@Override
-	public void mouseExited(MouseEvent e) {gameTimer.stop();}
+	public void mouseExited(MouseEvent e) {}//gameTimer.stop();}
 	@Override
 	public void mousePressed(MouseEvent e){}
 	@Override
