@@ -9,84 +9,34 @@ public abstract class UniversalFunctions
 {
 	public static Random Q = new Random();
 	static final float G = (float) 5;
-	public static float systemMass;
 	public static float MAXIMUM_SPEED = 800;
 	public static int PHYSICS_MODE = 1;
 	public static int COLOR_MODE = 1;
 	public static float FORCEFACTOR = (float) .4;
-	public static boolean JITTER = false;
+	public static boolean JITTER = true;
 	
 	static Particle massCenter = null;
-	public static Particle centerOfMass(ArrayList<Particle> field)
-	{
-		Particle placeholderParticle = null;
-		float centerX = 0, centerY = 0;//, systemMass = 0;
-		float numeratorX = 0, numeratorY = 0;
-		for (int q = 0; q <= field.size(); q++)
-		{
-			placeholderParticle = field.get(q);
-			numeratorX += (placeholderParticle.mass * placeholderParticle.X);
-			numeratorY += (placeholderParticle.mass * placeholderParticle.Y);
-		}
-		centerX = numeratorX/systemMass;
-		centerY = numeratorY/systemMass;
-		placeholderParticle.X = centerX; placeholderParticle.Y = centerY; placeholderParticle.mass = systemMass;
-		
-		massCenter = new Particle(centerX, centerY, systemMass);
-		//System.out.println(massCenter.mass + ", " + massCenter.X + ", " + massCenter.Y);
-		
-		centerX = 0; centerY = 0; systemMass = 0;
-		numeratorX = 0; numeratorY = 0;
-		return massCenter;
-	}
-	
-	/**
-	 * Fg = (G * Mass1 * Mass2)/(Distance^2)
-	 * Fg1 = Mass1 * Acceleration
-	 * Mass1 * Acceleration = Mass1 * Velocity^2 / Distance
-	 * Acceleration = Velocity^2 / Distance
-	 * 
-	 * Velocity^2 = (((G*Mass1*Mass2)/(Distance^2)) / Mass1) * (Distance)
-	 * Velocity^2 = ((G*Mass2)/Distance)
-	 * THEREFORE:
-	 * Velocity = Math.sqrt((G*Mass2)/distance)
-	 */
 
-	public synchronized static void determineGravitation(Particle Planet1, Particle Planet2)
+	public /*synchronized*/ static void determineGravitation(Particle Planet1, Particle Planet2)
 	{
 		//System.out.println("Determining Gravity");
 		float mass2 = Planet2.mass;
 		float distance, velocity, angle, velocityX, velocityY;
 	
 		float distX = (Planet2.X-Planet1.X); float distY = (Planet2.Y-Planet1.Y);
-		distance = (float) Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+		distance = (float) Math.sqrt((distX*distX) + (distY*distY));
 		//System.out.println(" Distance: " + distance);
 		
-		if (distance != 0)
-		{
+		velocity = 0;
+
 			velocity = (float) Math.sqrt((G*mass2)/distance) * FORCEFACTOR;
 			if (velocity > MAXIMUM_SPEED)
 				velocity = MAXIMUM_SPEED;
-		}
-		else if (distance == 0)
-			velocity = 0;
-		else
-			velocity = 9000;
-		
-		//System.out.println(" Velocity: " + velocity);
 		
 		angle = (float) (Math.atan2(distY, distX));//Trig functions to find X and Y velocity
 		
-		if (PHYSICS_MODE == 2) //"Spiral" PhysMode
-		{
-			//System.out.println(velocity);
-			angle += (Math.PI)/2 * (velocity/MAXIMUM_SPEED);
-		}
-		
-		//angle is given facing the actual other body - true gravity
-		//adding PI/2 gives it an orbital tangential velocity
-		velocityX = (float) ((velocity*Math.cos(angle))/90.00); 
-		velocityY = (float) ((velocity*Math.sin(angle))/90.00);
+		velocityX = (float) ((velocity*(distX/distance))/90.00); 
+		velocityY = (float) ((velocity*(distY/distance))/90.00);
 		
 		if (JITTER)
 		{
@@ -94,59 +44,12 @@ public abstract class UniversalFunctions
 			velocityY += Q.nextInt(3)-1;
 		}
 		
-		if ((PHYSICS_MODE == 1) || (PHYSICS_MODE == 3))
-		{	
-			Planet1.velocityX += velocityX; Planet1.velocityY += velocityY;
-		}
-		
-		if (PHYSICS_MODE  == 2)
-		{
-			Planet1.velocityX += velocityX; Planet1.velocityY += velocityY;
-		}
-		
-		if (PHYSICS_MODE == 4)
-		{
-			Planet1.velocityX += velocityX; Planet1.velocityY = velocityY;
-		}
-		
-		Planet1.move(); 
+		Planet1.velocityX += velocityX; Planet1.velocityY += velocityY;
+
 	}
 	
-	public static void adjustForceFactor(float adjustment)
-	{
-		if (PHYSICS_MODE == 3)
-			FORCEFACTOR *= adjustment;
-		else
-			FORCEFACTOR = (float) .4;
-	}
-	public static void forceAdjustment(Float FA)
-	{
-		FORCEFACTOR = FA;
-	}
-	public static void setColorMode(int newColorMode)
-	{
-		COLOR_MODE = newColorMode;
-	}
-	public static void setPhysMode(int newPhysMode)
-	{
-		PHYSICS_MODE = newPhysMode;
-	}
 	public static void switchJitter()
 	{
 		JITTER = !JITTER;
-	}
-	public static void borderRepulsion(Particle a) 
-	{
-		float distX = a.X, distY = a.Y;
-		float velocityX = (float) Math.sqrt((G*(a.mass))/distX);
-		
-		float velocityY = (float) Math.sqrt((G*(a.mass))/distY);
-		
-		float endDistX = 900 - a.X; float endDistY = 900 - a.Y;
-		velocityX += (float) Math.sqrt((G*ViewPanel.fieldDensity*a.mass)/endDistX);
-		velocityY += (float) Math.sqrt((G*ViewPanel.fieldDensity*a.mass)/endDistY);
-		System.out.println(velocityY);
-		
-		//a.velocityX += velocityX; a.velocityY += velocityY;	
 	}
 }

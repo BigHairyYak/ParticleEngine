@@ -2,20 +2,23 @@ package mainPackage;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.util.Random;
 
 public class Particle
 {
 	float X, Y, mass, velocityX, velocityY, vel;
 	boolean artificialParticle = false;
+	boolean stopped = false;
 	Color color;
-	Random Q = new Random();
+	//Random Q = new Random();
 	public Particle(float x, float y, float Mass)
 	{
 		X = x; Y = y; mass = Mass;
 		velocityX = velocityY = 0;
 
-		color = new Color(Q.nextInt(256), Q.nextInt(256), Q.nextInt(256));
+		color = Color.PINK; 
 	}
 	public Particle(Particle artificial)
 	{
@@ -25,59 +28,70 @@ public class Particle
 		artificialParticle = true;
 	}
 	
-	public void velocityColor(int colorMode)
+	public Color velocityColor(int colorMode)
 	{
 		int newColorValue = 0;
-			newColorValue = (int)(Math.abs(vel)/(50) * 255);
+		newColorValue = (int)(Math.abs(vel)/(50) * 255);
 		if (newColorValue > 255)
 			newColorValue = 255;
 		if (newColorValue < 0)
 			newColorValue = 0;
 		//System.out.println(newColorValue + ", " + (255-newColorValue));
 		if (colorMode == 1)
-			color = new Color(255-newColorValue, 0, newColorValue);
+			return new Color(255-newColorValue, 0, newColorValue);
 		else if (colorMode == 2)
-			color = new Color(newColorValue, 255-newColorValue, 0);
+			return new Color(newColorValue, 255-newColorValue, 0);
 		else if (colorMode == 3)
-			color = new Color(newColorValue, newColorValue, newColorValue);
+			return new Color(newColorValue, newColorValue, newColorValue);
 		else if (colorMode == 4)
-			color = new Color(255-newColorValue, 255-newColorValue, 255-newColorValue);
+			return new Color(255-newColorValue, 255-newColorValue, 255-newColorValue);
 		else if (colorMode == 5)
-			color = new Color(Math.abs(128-newColorValue), Math.abs(128-newColorValue), Math.abs(128-newColorValue));
+			return new Color(Math.abs(128-newColorValue), Math.abs(128-newColorValue), Math.abs(128-newColorValue));
 		else if (colorMode == 6)
-			color = new Color(newColorValue, 0, 0);
+			return new Color(newColorValue, 0, 0);
 		else if (colorMode == 7)
-			color = new Color(0, newColorValue, 0);
+			return new Color(0, newColorValue, 0);
 		else if (colorMode == 8)
-			color = new Color(0, 0, newColorValue);
-	}
-	public void velocityColorByDistance(int Distance)
-	{
-		int newColorValue = (int)(Math.abs(Distance)/450.00 * 255);
-		if (newColorValue > 255)
-			newColorValue = 255;
-		if (newColorValue < 0)
-			newColorValue = 0;
-	    color = new Color(255-newColorValue, 0, 255-newColorValue);
+			return new Color(0, 0, newColorValue);
+		else
+			return Color.PINK;
 	}
 	public void move()
 	{
-		float lastX = X; float lastY = Y;
-		vel = (float)Math.sqrt((velocityX*velocityX)+(velocityY*velocityY));
-		velocityColor(UniversalFunctions.COLOR_MODE);
+		//float lastX = X; float lastY = Y;
+		if (stopped == false)
+		{
+			vel = (float)Math.sqrt((velocityX*velocityX)+(velocityY*velocityY));
 		
-		X += velocityX; Y += velocityY;
-
-		//System.out.println(vel);
+			X += velocityX; Y += velocityY;
+			//velocityColor(1);
+		}
+		//System.out.println(velocityX);
 	}
 	
-	public void drawParticle(Graphics G)
+	public void stop()
 	{
-		G.setColor(color);
-		if (artificialParticle == false)
-			G.drawLine((int)(X), (int)(Y), (int)X, (int)Y);
-		else 
-			G.fillOval((int)(X-2), (int)(Y-2),  4,  4);
-		//X+=velocityX; Y+= velocityY;
+		velocityX -= 10;
+		velocityY -= 10;
+		//vel = 0;
+		if (Math.abs(velocityX) < 5 || Math.abs(velocityY) < 5)
+			stopped = true;
+		//stopped = true;
+	}
+	
+	public void drawParticle(Graphics2D G)
+	{
+		if (X > 0 && X < 1500 && Y > 0 && Y < 1000)
+		{
+			//G.setColor(velocityColor(/*UniversalFunctions.COLOR_MODE*/1));
+			//if (artificialParticle == false)			
+				G.drawLine((int)(X), (int)(Y), (int)X, (int)Y);
+			//else 
+				//G.fillOval((int)(X-2), (int)(Y-2),  4,  4);
+		}
+	}
+	public Point getLocation() 
+	{
+		return new Point((int)X, (int)Y);
 	}
 }
